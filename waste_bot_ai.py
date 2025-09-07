@@ -6,7 +6,7 @@ from sklearn.pipeline import make_pipeline
 st.set_page_config(page_title="Waste Classifier Bot", page_icon="♻️", layout="centered")
 
 st.title("♻️ Waste Classifier Bot (India)")
-st.write("Select from dropdown OR type your own waste item. Backend AI processes silently.")
+st.write("Select from dropdown OR type your own waste item. AI predicts the category.")
 
 # ---------- Seed dataset ----------
 examples = {
@@ -58,6 +58,6 @@ manual_input = st.text_input("Or type here:")
 user_text = manual_input.strip() if manual_input.strip() != "" else dropdown_choice
 
 if user_text:
-    # Backend AI processing silently
-    _ = model.predict([user_text])
-    st.success(f"✅ You entered: `{user_text}` (processed successfully)")
+    # AI prediction
+    category = model.predict([user_text])[0]
+    st.success(f"🗑️ Item: `{user_text}` \n🔎 Category: **{category}**")
