@@ -6,7 +6,7 @@ from sklearn.pipeline import make_pipeline
 st.set_page_config(page_title="Waste Classifier Bot", page_icon="♻️", layout="centered")
 
 st.title("♻️ Waste Classifier Bot (India)")
-st.write("Type or select a waste item. Backend AI processes it silently.")
+st.write("Select from dropdown OR type your own waste item. Backend AI processes silently.")
 
 # ---------- Seed dataset ----------
 examples = {
@@ -45,25 +45,19 @@ def train_model(examples_dict):
 
 model = train_model(examples)
 
-# ---------- Typeahead logic ----------
-def get_suggestions(query, items):
-    query = query.lower()
-    return [item for item in items if query in item.lower()]
+# ---------- UI ----------
+st.subheader("Select from dropdown OR type manually:")
 
-st.subheader("Type to see suggestions OR type your own:")
+# Dropdown
+dropdown_choice = st.selectbox("Pick from list:", [""] + all_items)
 
-typed_text = st.text_input("Enter waste item:")
+# Manual input
+manual_input = st.text_input("Or type here:")
 
-# Filter suggestions
-suggestions = get_suggestions(typed_text, all_items) if typed_text else []
+# Final user input (manual > dropdown)
+user_text = manual_input.strip() if manual_input.strip() != "" else dropdown_choice
 
-selected_item = None
-if suggestions:
-    selected_item = st.selectbox("Suggestions:", [""] + suggestions)
-elif typed_text:
-    selected_item = typed_text
-
-if selected_item:
-    # Backend AI processes silently
-    _ = model.predict([selected_item])
-    st.success(f"✅ You entered: `{selected_item}` (processed successfully)")
+if user_text:
+    # Backend AI processing silently
+    _ = model.predict([user_text])
+    st.success(f"✅ You entered: `{user_text}` (processed successfully)")
