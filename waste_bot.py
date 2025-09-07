@@ -1,23 +1,37 @@
 import streamlit as st
 
-# Waste Data
-waste_data = {
-    "plastic bottle": "Dry Waste",
-    "banana peel": "Wet Waste",
-    "vegetable": "Wet Waste",
-    "newspaper": "Dry Waste",
-    "battery": "Hazardous Waste",
-    "glass": "Dry Waste",
-    "food waste": "Wet Waste",
-    "medicine": "Hazardous Waste"
+# Waste Categories with keywords (India-specific common items)
+waste_categories = {
+    "Dry Waste": [
+        "plastic", "bottle", "newspaper", "magazine", "cardboard", "glass", "metal",
+        "aluminium", "tin", "paper", "carton", "thermocol", "rubber", "old clothes",
+        "shoes", "toys", "packaging", "polythene", "milk packet"
+    ],
+    "Wet Waste": [
+        "banana", "fruit", "vegetable", "food", "leftover", "tea", "coffee", "egg",
+        "garden", "leaves", "grass", "cooked rice", "bread", "chapati", "flowers",
+        "coconut", "onion peel", "potato peel", "fish", "meat"
+    ],
+    "Hazardous Waste": [
+        "battery", "medicine", "paint", "chemical", "syringe", "injection", "mask",
+        "sanitizer", "e-waste", "mobile", "tube light", "cfl", "thermometer",
+        "pesticide", "nail polish", "blade", "razor"
+    ]
 }
 
+# Classification function
 def classify_waste(item):
-    return waste_data.get(item.lower().strip(), None)
+    item = item.lower()
+    for category, keywords in waste_categories.items():
+        for word in keywords:
+            if word in item:
+                return category
+    return None
 
+# Streamlit App UI
 st.set_page_config(page_title="Waste Classifier Bot", page_icon="♻️")
-st.title("♻️ Waste Classifier Chatbot")
-st.write("Type a waste item to know whether it is **Dry, Wet, or Hazardous**.")
+st.title("♻️ Waste Classifier Chatbot (India)")
+st.write("Enter a waste item to know whether it is **Dry, Wet, or Hazardous Waste** as per Indian guidelines.")
 
 user_input = st.text_input("👉 Enter Waste Item:")
 
